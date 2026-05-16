@@ -1,18 +1,18 @@
-# 🔐 Database Security Lab — CN5134
+#  Database Security Lab — CN5134
 **Ain Shams University | Faculty of Computer & Information Sciences**  
 **Course: SEC304 — Spring 2026**
 
 ---
 
-## 📋 Overview
+##  Overview
 
 This lab simulates **three real-world database vulnerabilities** in isolated Docker containers. Each vulnerability has its own application stack, exploit script, and flag.
 
-> ⚠️ **For educational purposes only.** Run only in this isolated environment.
+>  **For educational purposes only.** Run only in this isolated environment.
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -38,7 +38,7 @@ This lab simulates **three real-world database vulnerabilities** in isolated Doc
 
 ---
 
-## 🎯 Vulnerabilities
+##  Vulnerabilities
 
 | # | Vulnerability | CVE | Database | Port | Member |
 |---|--------------|-----|----------|------|--------|
@@ -48,7 +48,7 @@ This lab simulates **three real-world database vulnerabilities** in isolated Doc
 
 ---
 
-## 🚀 Setup Instructions
+##  Setup Instructions
 
 ### Prerequisites
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed
@@ -93,7 +93,7 @@ vuln3-flask         Up
 
 ---
 
-## 💥 Running the Exploits
+##  Running the Exploits
 
 Each vulnerability folder contains an exploit script:
 
@@ -110,7 +110,7 @@ python vuln3-nosqli/exploit.py
 
 ---
 
-## 🔍 Writeups
+##  Writeups
 
 Each member wrote a detailed explanation of their vulnerability:
 
@@ -120,7 +120,7 @@ Each member wrote a detailed explanation of their vulnerability:
 
 ---
 
-## 🛑 Teardown
+##  Teardown
 
 ```bash
 # Stop and remove all containers
@@ -129,18 +129,6 @@ docker compose down
 # Also remove volumes (resets all databases)
 docker compose down -v
 ```
-
----
-
-## 👥 Team
-
-| Member | Role |
-|--------|------|
-| Member 1 | Project Lead & Docker Integration |
-| Member 2 | Vulnerability 1 — PostgreSQL RCE |
-| Member 3 | Vulnerability 2 — Blind SQL Injection |
-| Member 4 | Vulnerability 3 — NoSQL Injection |
-| Member 5 | QA Testing & Penetration Testing Report |
 
 ---
 
