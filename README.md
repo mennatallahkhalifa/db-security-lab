@@ -132,7 +132,7 @@ docker compose down -v
 
 ---
 
-## ⚠️ Troubleshooting
+##  Troubleshooting
 
 **Container keeps restarting?**
 ```bash
