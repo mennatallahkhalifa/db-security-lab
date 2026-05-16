@@ -1,0 +1,102 @@
+version: "3.8"
+
+# ============================================================
+#  DB Security Lab — CN5134 | Spring 2026
+#  Member 1: Project Lead & Docker Integration
+# ============================================================
+
+services:
+
+  # ──────────────────────────────────────────────
+  # VULNERABILITY 1 — PostgreSQL RCE (CVE-2019-9193)
+  # Member 2's work lives here
+  # Attack: COPY TO PROGRAM for OS command execution
+  # ──────────────────────────────────────────────
+  vuln1-db:
+    image: postgres:12.0          # Vulnerable version — supports COPY TO PROGRAM
+    container_name: vuln1-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: labdb
+    volumes:
+      - ./vuln1-postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+  vuln1-app:
+    build:
+      context: ./vuln1-postgresql
+      dockerfile: Dockerfile
+    container_name: vuln1-flask
+    ports:
+      - "5001:5001"               # Access at http://localhost:5001
+    depends_on:
+      - vuln1-db
+    networks:
+      - lab-network
+    restart: on-failure
+
+  # ──────────────────────────────────────────────
+  # VULNERABILITY 2 — Blind SQL Injection
+  # Member 3's work lives here
+  # Attack: Boolean-based blind SQLi extracts flag char by char
+  # ──────────────────────────────────────────────
+  vuln2-db:
+    image: mysql:8.0
+    container_name: vuln2-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: logindb
+    volumes:
+      - ./vuln2-blind-sqli/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+  vuln2-app:
+    build:
+      context: ./vuln2-blind-sqli
+      dockerfile: Dockerfile
+    container_name: vuln2-flask
+    ports:
+      - "5002:5002"               # Access at http://localhost:5002
+    depends_on:
+      - vuln2-db
+    networks:
+      - lab-network
+    restart: on-failure
+
+  # ──────────────────────────────────────────────
+  # VULNERABILITY 3 — NoSQL Injection (MongoDB)
+  # Member 4's work lives here
+  # Attack: JSON operator injection {"$gt":""} bypasses login
+  # ──────────────────────────────────────────────
+  vuln3-db:
+    image: mongo:6.0
+    container_name: vuln3-mongo
+    networks:
+      - lab-network
+    restart: unless-stopped
+
+  vuln3-app:
+    build:
+      context: ./vuln3-nosqli
+      dockerfile: Dockerfile
+    container_name: vuln3-flask
+    ports:
+      - "5003:5003"               # Access at http://localhost:5003
+    depends_on:
+      - vuln3-db
+    networks:
+      - lab-network
+    restart: on-failure
+
+# ──────────────────────────────────────────────
+# SHARED NETWORK — all containers communicate here
+# ──────────────────────────────────────────────
+networks:
+  lab-network:
+    driver: bridge
+    name: db-security-lab-network
