@@ -3,6 +3,9 @@
 --  Auto-executed by MySQL on first container start
 --  (placed in /docker-entrypoint-initdb.d/)
 -- =============================================================
+CREATE DATABASE IF NOT EXISTS logindb;
+USE logindb;
+
 
 CREATE TABLE IF NOT EXISTS users (
     id       INT          AUTO_INCREMENT PRIMARY KEY,
