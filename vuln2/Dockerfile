@@ -9,7 +9,6 @@ RUN pip install --no-cache-dir flask==3.0.3 pymysql==1.1.0
 WORKDIR /app
 COPY src/    ./src/
 COPY init/   ./init/
-COPY config/ ./config/
 
 EXPOSE 5000
 
