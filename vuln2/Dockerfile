@@ -1,9 +1,16 @@
+# -------------------------------------------------------
+#  vuln2 — Blind SQL Injection (MySQL 8.0 + Flask)
+# -------------------------------------------------------
 FROM python:3.11-slim
 
+# Install pymysql (pure-Python MySQL driver — no system libs needed)
+RUN pip install --no-cache-dir flask==3.0.3 pymysql==1.1.0
+
 WORKDIR /app
-COPY app/ .
+COPY src/    ./src/
+COPY init/   ./init/
+COPY config/ ./config/
 
-RUN pip install flask mysql-connector-python
+EXPOSE 5000
 
-EXPOSE 5002
-CMD ["python", "app.py"]
+CMD ["python", "/app/src/app.py"]
