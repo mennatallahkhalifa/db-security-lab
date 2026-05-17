@@ -1,4 +1,4 @@
-version: "3.8"
+
 
 # ============================================================
 #  DB Security Lab — CN5134 | Spring 2026
@@ -27,7 +27,7 @@ services:
 
   vuln1-app:
     build:
-      context: ./vuln1-postgresql
+      context: ./vuln1
       dockerfile: Dockerfile
     container_name: vuln1-flask
     ports:
@@ -57,7 +57,7 @@ services:
 
   vuln2-app:
     build:
-      context: ./vuln2-blind-sqli
+      context: ./vuln2
       dockerfile: Dockerfile
     container_name: vuln2-flask
     ports:
@@ -82,7 +82,7 @@ services:
 
   vuln3-app:
     build:
-      context: ./vuln3-nosqli
+      context: ./vuln3
       dockerfile: Dockerfile
     container_name: vuln3-flask
     ports:
