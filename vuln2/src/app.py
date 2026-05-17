@@ -1,16 +1,15 @@
 from flask import Flask, request, render_template_string
 import pymysql
-import os
 import time
 
 app = Flask(__name__)
 
 DB_CONFIG = {
-    "host":     os.environ.get("DB_HOST",     "vuln2-mysql"),
-    "user":     os.environ.get("DB_USER",     "ctfuser"),
-    "password": os.environ.get("DB_PASSWORD", "ctfpass"),
-    "database": os.environ.get("DB_NAME",     "ctfdb"),
-    "port":     int(os.environ.get("DB_PORT", 3306)),
+    "host":     "vuln2-db",
+    "user":     "root",
+    "password": "root",
+    "database": "logindb",
+    "port":     3306,
 }
 
 LOGIN_HTML = """
@@ -115,4 +114,4 @@ if __name__ == "__main__":
             print(f"[*] Waiting for database... ({i+1}/30)")
             time.sleep(2)
 
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5002, debug=False)
