@@ -11,6 +11,5 @@ COPY src/    ./src/
 COPY init/   ./init/
 COPY config/ ./config/
 
-EXPOSE 5000
-
-CMD ["python", "/app/src/app.py"]
+EXPOSE 5002
+CMD ["python", "src/app.py"]
