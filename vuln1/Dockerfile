@@ -1,6 +1,7 @@
 FROM python:3.11-slim
 
 WORKDIR /app
+COPY src/ .
 
 # Install dependencies
 RUN pip install flask psycopg2-binary
