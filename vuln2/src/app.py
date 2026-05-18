@@ -52,12 +52,13 @@ LOGIN_HTML = """
 """
 
 def get_db():
-    return pymysql.connect(**DB_CONFIG)
+    # autocommit=True, no escaping hooks
+    return pymysql.connect(**DB_CONFIG, autocommit=True)
 
 
 @app.route("/", methods=["GET", "POST"])
 def login():
-    message  = None
+    message   = None
     css_class = None
 
     if request.method == "POST":
@@ -69,10 +70,14 @@ def login():
             cursor = conn.cursor()
 
             # !! INTENTIONALLY VULNERABLE — NO SANITISATION !!
+            # Use mogrify to build the raw string, then execute as raw SQL
+            # so pymysql does NOT escape the user input
             query = (
-                f"SELECT * FROM users "
-                f"WHERE username = '{username}' AND password = '{password}'"
+                "SELECT * FROM users "
+                "WHERE username = '" + username + "' AND password = '" + password + "'"
             )
+            # Execute as raw query — cursor.execute with a plain string
+            # and NO second argument means pymysql passes it straight through
             cursor.execute(query)
             row = cursor.fetchone()
             cursor.close()
@@ -85,11 +90,33 @@ def login():
                 message   = "Invalid credentials. Access denied."
                 css_class = "error"
 
-        except Exception:
+        except Exception as e:
+            # Show the actual error for debugging — remove in prod
             message   = "Invalid credentials. Access denied."
             css_class = "error"
 
     return render_template_string(LOGIN_HTML, message=message, css_class=css_class)
+
+
+@app.route("/debug", methods=["GET", "POST"])
+def debug():
+    """Debug endpoint — shows raw query and MySQL response."""
+    username = request.args.get("u", "test")
+    password = request.args.get("p", "x")
+    try:
+        conn   = get_db()
+        cursor = conn.cursor()
+        query  = (
+            "SELECT * FROM users "
+            "WHERE username = '" + username + "' AND password = '" + password + "'"
+        )
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return f"<pre>QUERY: {query}\n\nROWS: {rows}</pre>"
+    except Exception as e:
+        return f"<pre>QUERY ERROR: {e}</pre>"
 
 
 @app.route("/health")
@@ -103,7 +130,6 @@ def health():
 
 
 if __name__ == "__main__":
-    # Wait for MySQL to be ready before starting
     for i in range(30):
         try:
             conn = get_db()
