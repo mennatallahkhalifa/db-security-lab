@@ -73,6 +73,8 @@ services:
   vuln3-db:
     image: mongo:6.0
     container_name: vuln3-mongo
+    volumes:
+    - ./vuln3/init/init.js:/docker-entrypoint-initdb.d/init.js
     networks:
       - lab-network
     restart: unless-stopped
